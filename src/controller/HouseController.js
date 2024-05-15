@@ -41,7 +41,7 @@ class HouseController {
         status,
       }
     );
-    return res.send();
+    return res.json({ message: "Casa atualizada." });
   }
   async destroy(req, res) {
     const { house_id } = req.body;
@@ -52,7 +52,7 @@ class HouseController {
       return res.status(401).json({ error: "Acesso não autorizado!" });
     }
     await House.findByIdAndDelete({ _id: house_id });
-    return res.json({ message: "Casa excluída! Cê tá ferrado!" });
+    res.json({ message: "Casa excluída." });
   }
 }
 export default new HouseController();
