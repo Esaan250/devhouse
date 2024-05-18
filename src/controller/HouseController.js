@@ -1,10 +1,20 @@
 import House from "../models/House";
 import User from "../models/User";
+import * as Yup from "yup";
 class HouseController {
   async store(req, res) {
+    const schema = Yup.object().shape({
+      description: Yup.string().required(),
+      price: Yup.number().required(),
+      location: Yup.string().required(),
+      status: Yup.boolean().required(),
+    });
     const { filename } = req.file;
     const { description, price, location, status } = req.body;
     const { user_id } = req.headers;
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ erro: "Falha na validação." });
+    }
     const house = await House.create({
       user: user_id,
       thumbnail: filename,
@@ -21,6 +31,12 @@ class HouseController {
     return res.json(houses);
   }
   async update(req, res) {
+    const schema = Yup.object().shape({
+      description: Yup.string().required(),
+      price: Yup.number().required(),
+      location: Yup.string().required(),
+      status: Yup.boolean().required(),
+    });
     const { filename } = req.file;
     const { house_id } = req.params;
     const { description, price, location, status } = req.body;
@@ -29,6 +45,9 @@ class HouseController {
     const houses = await House.findById(house_id);
     if (String(user._id) !== String(houses.user)) {
       return res.status(401).json({ error: "Acesso não autorizado!" });
+    }
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ erro: "Falha na validação." });
     }
     await House.updateOne(
       { _id: house_id },
