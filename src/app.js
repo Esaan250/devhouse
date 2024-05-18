@@ -9,7 +9,7 @@ class App {
     this.server = express();
     mongoose
       .connect(
-        `mongodb+srv://${}:${password}@mongoserver.vc6jcnv.mongodb.net/?retryWrites=true&w=majority&appName=mongoserver`
+        `mongodb+srv://${login}:${password}@mongoserver.vc6jcnv.mongodb.net/?retryWrites=true&w=majority&appName=mongoserver`
       )
       .then((db) => {
         console.log(db);
